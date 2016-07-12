@@ -8,17 +8,21 @@
             "Accept: */*"
         );
 
-
 		$ch = curl_init();  
 		$timeout = 5;  
 		curl_setopt ($ch, CURLOPT_URL, "https://api.connector.mbed.com/endpoints/");
 		curl_setopt ($ch, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt ($ch, CURLOPT_HEADER, 1); //取得返回头信息
+		//curl_setopt ($ch, CURLOPT_HEADER, 1); //取得返回头信息
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); //不验证证书
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); //不验证证书   
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);  
 		curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);  
 		$file_contents = curl_exec($ch);  
 		curl_close($ch);  
-		echo $file_contents;	
+		#echo $file_contents;
+		$file_contents = json_decode($file_contents);
+		#var_dump($file_contents);
+		$endpointsNumbers = count($file_contents);
+		require './tpl_get_endpoints.php'
+		
 	 ?>
