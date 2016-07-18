@@ -67,11 +67,15 @@ def get_button_resource():
 
 @app.route('/get_pattern_resource',methods=['GET'])
 def get_pattern_resource():
-	epButtonResource = connector.getResourceValue(request.args.get("pointid"),request.args.get("patternid"))
-	while not epButtonResource.isDone():
-		None	
-	#return epButtonResource.result
-	return render_template("tpl_pattern_resources.html",patternContent=epButtonResource.result,pointid=request.args.get("pointid"))
+	if(request.args.get("value")!='1'):
+		epPatternResource = connector.postResource(request.args.get("pointid"),request.args.get("patternid"),request.args.get("value"))
+		while not epPatternResource.isDone():
+			None
+	epPatternResource = connector.getResourceValue(request.args.get("pointid"),request.args.get("patternid"))
+	while not epPatternResource.isDone():
+		None
+	#return epPatternResource.result
+	return render_template("tpl_pattern_resources.html",patternContent=epPatternResource.result,pointid=request.args.get("pointid"),patternid=request.args.get("patternid"))
 
 @socketio.on('connect')
 def connect():
@@ -157,5 +161,5 @@ if __name__ == "__main__":
 	connector.deleteAllSubscriptions()							# remove all subscriptions, start fresh
 	connector.startLongPolling()								# start long polling connector.mbed.com
 	connector.setHandler('notifications', notificationHandler) 	# send 'notifications' to the notificationHandler FN
-	# socketio.run(app,host='0.0.0.0', port=80,debug=True)
-	socketio.run(app,host='0.0.0.0', port=80)
+	socketio.run(app,host='0.0.0.0', port=80,debug=True)
+	# socketio.run(app,host='0.0.0.0', port=80)
