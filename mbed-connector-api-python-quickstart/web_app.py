@@ -4,7 +4,7 @@ from   flask 			import Flask,request,render_template	# framework for hosting web
 from   flask_socketio 	import SocketIO, emit,send,join_room, leave_room  
 from   base64 			import standard_b64decode as b64decode
 import os
-
+import random
 app = Flask(__name__)
 socketio = SocketIO(app,async_mode='threading')
 
@@ -76,6 +76,14 @@ def get_pattern_resource():
 		None
 	#return epPatternResource.result
 	return render_template("tpl_pattern_resources.html",patternContent=epPatternResource.result,pointid=request.args.get("pointid"),patternid=request.args.get("patternid"))
+@app.route('/mcu_temp', methods=['GET'])
+def get_mcu_temp():
+	return render_template("mcu_temp.html")
+@app.route('/mcu_temp/temp', methods=['GET'])
+def get_temp():
+	if(request.args.get("data")=='2'):
+
+		return str(random.randint(34,40))
 
 @socketio.on('connect')
 def connect():
