@@ -81,9 +81,16 @@ def get_mcu_temp():
 	return render_template("mcu_temp.html")
 @app.route('/mcu_temp/temp', methods=['GET'])
 def get_temp():
-	if(request.args.get("data")=='2'):
-
-		return str(random.randint(34,40))
+	# if(request.args.get("data")=='2'):
+	# 	# return str(random.randint(34,40))
+	# 	tempResource = connector.postResource("dc04acea-1d5a-4bbf-b1b6-fb7ee0de9e69","/3205/0/3206/","temp")
+	# 	while not tempResource.isDone():
+	# 		None
+	# 	return tempResource.result
+	tempResource = connector.postResource("dc04acea-1d5a-4bbf-b1b6-fb7ee0de9e69","/3205/0/3206/")
+	while not tempResource.isDone():
+		None
+	return tempResource.result		
 
 @socketio.on('connect')
 def connect():
