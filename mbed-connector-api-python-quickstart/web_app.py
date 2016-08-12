@@ -5,6 +5,7 @@ from   flask_socketio 	import SocketIO, emit,send,join_room, leave_room
 from   base64 			import standard_b64decode as b64decode
 import os
 import random
+import time
 app = Flask(__name__)
 socketio = SocketIO(app,async_mode='threading')
 
@@ -92,10 +93,16 @@ def get_temp():
 
 	# return connector.getEndpoints().result
 	# print "receive success"
-	tempResource = connector.postResource("dc04acea-1d5a-4bbf-b1b6-fb7ee0de9e69","/3205/0/3206/")
-	while not tempResource.isDone():
-		None
-	return tempResource.result
+	ticks = "receive:" + str(time.time()) + "</br>"
+	# return ticks
+	# tempResource = connector.postResource("dc04acea-1d5a-4bbf-b1b6-fb7ee0de9e69","/3205/0/3206", "temp")
+	# while not tempResource.isDone():
+	# 	None
+	tempResource = connector._postURL("/endpoints/dc04acea-1d5a-4bbf-b1b6-fb7ee0de9e69/3205/0/3206")
+	ticks = ticks + "response:" + str(time.time()) + "</br>"
+	ticks = ticks + str(tempResource.content)
+	return str(tempResource)
+	# return tempResource.result
 	# return "100"		
 
 @socketio.on('connect')
