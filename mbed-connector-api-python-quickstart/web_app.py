@@ -69,7 +69,7 @@ def get_button_resource():
 @app.route('/get_pattern_resource',methods=['GET'])
 def get_pattern_resource():
 	if(request.args.get("value")!='1'):
-		epPatternResource = connector.postResource(request.args.get("pointid"),request.args.get("patternid"),request.args.get("value"))
+		epPatternResource = connector.putResourceValue(request.args.get("pointid"),request.args.get("patternid"),request.args.get("value"))
 		while not epPatternResource.isDone():
 			None
 	epPatternResource = connector.getResourceValue(request.args.get("pointid"),request.args.get("patternid"))
@@ -98,10 +98,18 @@ def get_temp():
 	# tempResource = connector.postResource("dc04acea-1d5a-4bbf-b1b6-fb7ee0de9e69","/3205/0/3206", "temp")
 	# while not tempResource.isDone():
 	# 	None
-	tempResource = connector._postURL("/endpoints/dc04acea-1d5a-4bbf-b1b6-fb7ee0de9e69/3205/0/3206")
-	ticks = ticks + "response:" + str(time.time()) + "</br>"
-	ticks = ticks + str(tempResource.content)
-	return str(tempResource)
+	# tempResource = connector._postURL("/endpoints/dc04acea-1d5a-4bbf-b1b6-fb7ee0de9e69/3205/0/3206")
+	# epPatternResource = connector.getResourceValue("dc04acea-1d5a-4bbf-b1b6-fb7ee0de9e69","/3205/0/3206")
+	# while not epPatternResource.isDone():
+	# 	None
+	# return epPatternResource.result
+	epButtonResource = connector.postResource(request.args.get("pointid"),request.args.get("tempid"))
+	while not epButtonResource.isDone():
+		None
+	return epButtonResource.result
+	# ticks = ticks + "response:" + str(time.time()) + "</br>"
+	# ticks = ticks + str(tempResource.content)
+	# return str(tempResource)
 	# return tempResource.result
 	# return "100"		
 
