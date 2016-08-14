@@ -1,0 +1,38 @@
+{% include 'header.html' %}
+    <title>echarts</title>
+</head>
+<body style="text-align: center">
+
+    <div class="container">
+        <h3><img src="../static/img/NXP_logo.png">  Here is MCU temperature monitor</h3>
+        <hr>
+        <hr>
+        <div id="main" style="width: 900px;height:500px;text-align: center">
+            
+        </div>
+        <div><button class="btn btn-warning">temperature</button></div>
+    </div>
+
+
+
+    <script type="text/javascript" src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+    <script type="text/javascript" src="../static/js/socket.io.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(function(){
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            // var socket = io.connect();
+            alert("start to emit get temp");
+            socket.emit("get_temp","dd");
+            socket.on('temp', function (data) {
+
+                alert(data.value);
+            });
+
+
+
+
+        });
+
+    </script>
+
+{% include 'footer.html' %}

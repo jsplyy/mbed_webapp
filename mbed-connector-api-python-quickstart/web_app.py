@@ -83,6 +83,8 @@ def get_mcu_temp():
 
 @app.route('/temp', methods=['GET'])
 def get_temp():
+	
+	return render_template("mcu_temp.html")
 	# if(request.args.get("data")=='2'):
 		# return str(random.randint(34,40))
 	# 	tempResource = connector.postResource("dc04acea-1d5a-4bbf-b1b6-fb7ee0de9e69","/3205/0/3206/","temp")
@@ -103,15 +105,38 @@ def get_temp():
 	# while not epPatternResource.isDone():
 	# 	None
 	# return epPatternResource.result
-	epButtonResource = connector.postResource(request.args.get("pointid"),request.args.get("tempid"))
-	while not epButtonResource.isDone():
-		None
-	return epButtonResource.result
+	# epButtonResource = connector.postResource(request.args.get("pointid"),request.args.get("tempid"))
+	# while not epButtonResource.isDone():
+	# 	None
+	# return epButtonResource.result
 	# ticks = ticks + "response:" + str(time.time()) + "</br>"
 	# ticks = ticks + str(tempResource.content)
 	# return str(tempResource)
 	# return tempResource.result
-	# return "100"		
+	# return "100"	
+@app.route('/test', methods=['GET'])
+def test():
+	return render_template("test.html")
+
+@socketio.on('get_temp')
+def getPresses(data):
+	# Read data from GET resource /3200/0/5501 (num button presses)
+	# emit('temp','100')
+	# print("get_temp ",data)
+	e = connector.postResource("dc04acea-1d5a-4bbf-b1b6-fb7ee0de9e69","/3205/0/3206")
+	while not e.isDone():
+		None
+	# emit('temp')
+	if e.error:
+		print("Error: ",e.error.errType, e.error.error, e.raw_data)
+	else:
+		data_to_emit = {"value":e.result}
+		print data_to_emit
+		emit('temp', data_to_emit)
+
+@socketio.on('my event')
+def my_event(message):
+    print "my event"
 
 @socketio.on('connect')
 def connect():
